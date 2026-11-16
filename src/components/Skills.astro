@@ -1,0 +1,65 @@
+---
+import { skills, education } from '../data/site';
+---
+<section class="section tint" id="skills">
+  <div class="inner">
+    <div class="head">
+      <h2 class="heading">What I work with.</h2>
+    </div>
+    <dl class="groups">
+      {skills.map((g) => (
+        <div class="group">
+          <dt>{g.title}</dt>
+          <dd>{g.items.map((s) => <span class="pill">{s}</span>)}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<section class="section" id="education">
+  <div class="inner">
+    <div class="head">
+      <h2 class="heading">Where I studied.</h2>
+    </div>
+    <div class="schools">
+      {education.map((e) => (
+        <article class:list={['school', { plain: !e.stat }]}>
+          {e.stat && <p class="stat"><b>{e.stat}</b><span>{e.statLabel}</span></p>}
+          <div>
+            <h3>{e.url ? <a href={e.url} target="_blank" rel="noopener">{e.school}</a> : e.school}</h3>
+            <p class="degree">{e.degree}</p>
+            <p class="meta">{e.place}. {e.years}</p>
+            {e.docs.length > 0 && <div class="docs">{e.docs.map((d) => <a class="pill" href={d.href} target="_blank" rel="noopener">{d.label}</a>)}</div>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .groups { margin: 0; display: grid; gap: 12px; }
+  .group { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 12px 24px; background: var(--bg); border-radius: 20px; padding: clamp(18px, 2.6vw, 26px) clamp(18px, 3vw, 32px); }
+  dt { font-size: 19px; font-weight: 600; letter-spacing: -0.015em; }
+  dd { margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  dd .pill { background: var(--surface); color: var(--ink); font-size: 14px; padding: 6px 13px; }
+
+  .schools { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .school { background: var(--surface); border-radius: 24px; padding: clamp(22px, 3vw, 32px); display: flex; flex-direction: column; justify-content: space-between; gap: 28px; min-height: 300px; }
+  .school.plain { grid-column: span 2; min-height: 0; }
+  .stat b { display: block; font-size: clamp(56px, 8vw, 88px); font-weight: 700; letter-spacing: -0.04em; line-height: 1; color: var(--accent); }
+  .stat span { display: block; font-size: 15px; color: var(--muted); margin-top: 6px; }
+  h3 { font-size: clamp(22px, 2.6vw, 28px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; }
+  h3 a:hover { color: var(--link); }
+  .degree { margin-top: 6px; }
+  .meta { color: var(--muted); font-size: 15px; margin-top: 2px; }
+  .docs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+  .docs .pill { background: var(--bg); }
+  @media (max-width: 760px) {
+    .group { grid-template-columns: 1fr; }
+    .schools { grid-template-columns: 1fr; }
+    .school.plain { grid-column: auto; }
+    .school { min-height: 0; }
+  }
+</style>

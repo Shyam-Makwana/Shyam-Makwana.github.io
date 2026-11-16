@@ -1,0 +1,49 @@
+---
+import { profile } from '../data/site';
+const year = new Date().getFullYear();
+---
+<section class="section tint contact" id="contact">
+  <div class="inner">
+    <h2 class="heading big">Let's talk.</h2>
+    <p class="subheading">Have a role, a project or a question? Email is the fastest way to reach me.</p>
+    <div class="actions">
+      <a class="btn primary" href={`mailto:${profile.email}`}>Email me</a>
+      <button class="btn ghost" id="copy" data-email={profile.email}>Copy email address</button>
+    </div>
+    <p class="email">{profile.email}</p>
+    <ul class="socials">
+      {profile.socials.map((s) => <li><a href={s.url} target="_blank" rel="noopener me">{s.label}</a></li>)}
+    </ul>
+  </div>
+</section>
+
+<footer class="foot">
+  <p>© {year} {profile.name}</p>
+  <a href="#top">Back to top</a>
+</footer>
+
+<script>
+  const btn = document.getElementById('copy') as HTMLButtonElement;
+  const label = btn.textContent!;
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(btn.dataset.email!);
+      btn.textContent = 'Copied';
+    } catch (e) {
+      btn.textContent = 'Could not copy. Select the address below.';
+    }
+    setTimeout(() => { btn.textContent = label; }, 2200);
+  });
+</script>
+
+<style>
+  .contact { text-align: center; }
+  .big { font-size: clamp(52px, 11vw, 120px); letter-spacing: -0.04em; }
+  .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+  .email { margin-top: 18px; font-size: 15px; color: var(--muted); user-select: all; }
+  .socials { list-style: none; padding: 0; margin: clamp(40px, 6vw, 72px) 0 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 28px; }
+  .socials a { color: var(--link); font-size: 17px; }
+  .socials a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 20px var(--pad); font-size: 13px; color: var(--muted); background: var(--surface); border-top: 1px solid var(--line); }
+  .foot a:hover { color: var(--ink); }
+</style>

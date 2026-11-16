@@ -1,0 +1,52 @@
+---
+import { profile, roles } from '../data/site';
+---
+<section class="section about" id="about">
+  <div class="inner">
+    {profile.about.map((p, i) => <p class:list={['say', { second: i > 0 }]}>{p}</p>)}
+  </div>
+</section>
+
+<section class="section tint" id="work">
+  <div class="inner">
+    <div class="head">
+      <h2 class="heading">Where I've worked.</h2>
+      <p class="subheading">Seven roles since 2019, from student chapters to a security company.</p>
+    </div>
+    <ol class="roles">
+      {roles.map((r, i) => (
+        <li class="role">
+          <p class="when">{r.start} to {r.end}{i === 0 && <span class="now">Now</span>}</p>
+          <div class="what">
+            <h3>{r.url ? <a href={r.url} target="_blank" rel="noopener">{r.company}</a> : r.company}</h3>
+            <p>{r.role}</p>
+          </div>
+          <div class="docs">
+            {r.docs?.map((d) => <a class="pill" href={d.href} target="_blank" rel="noopener">{d.label}</a>)}
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .about .inner { max-width: 880px; }
+  .say { font-size: clamp(24px, 3.6vw, 40px); line-height: 1.22; letter-spacing: -0.022em; font-weight: 600; }
+  .say.second { color: var(--muted); margin-top: 0.7em; }
+  .roles { list-style: none; margin: 0; padding: 0; background: var(--bg); border-radius: 24px; overflow: hidden; }
+  .role { display: grid; grid-template-columns: 200px minmax(0, 1fr) auto; gap: 8px 24px; align-items: center; padding: 22px clamp(18px, 3vw, 32px); }
+  .role + .role { border-top: 1px solid color-mix(in srgb, var(--line) 60%, transparent); }
+  .when { font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .now { font-size: 12px; font-weight: 600; color: #fff; background: var(--accent); padding: 2px 9px; border-radius: 980px; }
+  h3 { font-size: clamp(19px, 2.2vw, 22px); font-weight: 600; letter-spacing: -0.015em; line-height: 1.25; }
+  h3 a:hover { color: var(--link); }
+  .what p { color: var(--muted); font-size: 15px; margin-top: 2px; }
+  .docs { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .docs .pill { background: var(--surface); }
+  @media (max-width: 760px) {
+    .role { grid-template-columns: 1fr; }
+    .docs { justify-content: flex-start; }
+    .docs:empty { display: none; }
+  }
+</style>

@@ -1,0 +1,92 @@
+---
+import { projects } from '../data/site';
+const featured = projects.filter((p) => p.featured);
+const rest = projects.filter((p) => !p.featured);
+// First and fourth tiles are wide, which gives the grid its rhythm.
+const wide = (i: number) => i % 4 === 0 || i % 4 === 3;
+---
+<section class="section" id="projects">
+  <div class="inner">
+    <div class="head">
+      <h2 class="heading">Things I've built.</h2>
+      <p class="subheading">{projects.length} projects across web apps, machine learning and systems.</p>
+    </div>
+
+    <div class="grid">
+      {featured.map((p, i) => (
+        <article class:list={['tile', { wide: wide(i) }]}>
+          <div>
+            <h3>{p.title}</h3>
+            <p>{p.summary}</p>
+          </div>
+          <div class="foot">
+            <div class="tags">{p.techs.map((t) => <span class="pill">{t}</span>)}</div>
+            <div class="go">
+              {p.live && <a class="btn primary small" href={p.live} target="_blank" rel="noopener">Open site</a>}
+              {p.github && <a class="btn ghost small" href={p.github} target="_blank" rel="noopener">View code</a>}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="more" id="more" hidden>
+      {rest.map((p) => (
+        <article class="row">
+          <div>
+            <h3>{p.title}</h3>
+            <p>{p.summary}</p>
+            <p class="stack">{p.techs.join(', ')}</p>
+          </div>
+          {p.github && <a class="pill" href={p.github} target="_blank" rel="noopener">View code</a>}
+        </article>
+      ))}
+    </div>
+    <div class="center">
+      <button class="btn ghost" id="more-btn" aria-expanded="false" aria-controls="more">Show {rest.length} more projects</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  const btn = document.getElementById('more-btn')!;
+  const more = document.getElementById('more')!;
+  const closed = btn.textContent!;
+  btn.addEventListener('click', () => {
+    more.hidden = !more.hidden;
+    btn.setAttribute('aria-expanded', String(!more.hidden));
+    btn.textContent = more.hidden ? closed : 'Show fewer projects';
+  });
+</script>
+
+<style>
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .tile { background: var(--surface); border-radius: 24px; padding: clamp(22px, 3vw, 32px); min-height: 280px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
+  .tile.wide { grid-column: span 2; }
+  h3 { font-size: clamp(22px, 2.6vw, 28px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; }
+  .tile p { font-size: 16px; line-height: 1.5; color: var(--muted); margin-top: 10px; max-width: 34em; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags .pill { background: var(--bg); }
+  .go { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+  .btn.small { height: 36px; padding: 0 16px; font-size: 14px; }
+
+  .more { margin-top: 16px; border-radius: 24px; background: var(--surface); padding: 6px clamp(18px, 3vw, 32px); }
+  .more[hidden] { display: none; }
+  .row { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 20px 0; }
+  .row + .row { border-top: 1px solid var(--line); }
+  .row h3 { font-size: 19px; }
+  .row p { font-size: 15px; color: var(--muted); margin-top: 4px; max-width: 46em; }
+  .row .stack { font-size: 13px; }
+  .row .pill { background: var(--bg); flex: none; }
+  .center { text-align: center; margin-top: 28px; }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+    .tile.wide { grid-column: span 2; }
+  }
+  @media (max-width: 620px) {
+    .grid { grid-template-columns: 1fr; }
+    .tile.wide { grid-column: auto; }
+    .tile { min-height: 0; }
+    .row { flex-direction: column; align-items: flex-start; gap: 12px; }
+  }
+</style>
